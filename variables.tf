@@ -3,7 +3,8 @@ variable "region" {
 }
 
 variable "ami_id" {
-  description = "AMI ID"
+  description = "AMI ID for EC2"
+  default     = "ami-033bd18826652770f"
 }
 
 variable "instance_type" {
@@ -11,7 +12,8 @@ variable "instance_type" {
 }
 
 variable "key_name" {
-  default = "my-terraform-key"
+  description = "SSH Key Name"
+  default     = "my-terraform-key"
 }
 
 variable "project" {
