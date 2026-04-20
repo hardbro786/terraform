@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket         = "otms-dev-state"
-    key            = "env/dev/application/otms/private-ec2/terraform.tfstate"
+    key            = "env/dev/application/otms/frontend-ec2/terraform.tfstate"
     region         = "us-east-1"
     dynamodb_table = "terraform-lock"
   }
@@ -11,7 +11,7 @@ provider "aws" {
   region = var.region
 }
 
-# 🔹 Subnet Remote State (PRIVATE SUBNET)
+# 🔹 Subnet (PRIVATE)
 data "terraform_remote_state" "subnet" {
   backend = "s3"
 
@@ -22,7 +22,7 @@ data "terraform_remote_state" "subnet" {
   }
 }
 
-# 🔹 Security Group Remote State
+# 🔹 Security Group
 data "terraform_remote_state" "frontend_sg" {
   backend = "s3"
 
@@ -33,7 +33,7 @@ data "terraform_remote_state" "frontend_sg" {
   }
 }
 
-# 🔹 Private EC2 Instance
+# 🔹 PRIVATE EC2 INSTANCE
 resource "aws_instance" "private_instance" {
   ami           = var.ami_id
   instance_type = var.instance_type
@@ -41,19 +41,19 @@ resource "aws_instance" "private_instance" {
   # ✅ Private subnet
   subnet_id = data.terraform_remote_state.subnet.outputs.private_subnet_1_id
 
-  # ✅ NO public IP
-  associate_public_ip_address = false
-
-  # ✅ Security Group
+  # ✅ Attach SG
   vpc_security_group_ids = [
     data.terraform_remote_state.frontend_sg.outputs.security_group_id
   ]
 
-  # ✅ SSH Key (optional)
+  # ✅ SSH Key
   key_name = var.key_name
 
+  # ❌ NO PUBLIC IP (important)
+  associate_public_ip_address = false
+
   tags = {
-    Name        = "${var.project}-${var.env}-private-ec2"
+    Name        = "${var.project}-${var.env}-private-instance"
     Environment = var.env
     Project     = var.project
   }
