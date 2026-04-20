@@ -1,11 +1,11 @@
 output "instance_id" {
-  value = aws_instance.app_server.id
+  value = aws_instance.private_instance.id
 }
 
 output "private_ip" {
-  value = aws_instance.app_server.private_ip
+  value = aws_instance.private_instance.private_ip
 }
 
-output "subnet_used" {
-  value = data.terraform_remote_state.subnet.outputs.private_subnet_1_id
+output "ssh_note" {
+  value = "Use Bastion or SSM to connect (No Public IP)"
 }
