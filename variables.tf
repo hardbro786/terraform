@@ -1,19 +1,23 @@
-variable "env" {
-  default = "dev"
+variable "region" {
+  default = "us-east-1"
+}
+
+variable "ami_id" {
+  description = "AMI ID"
+}
+
+variable "instance_type" {
+  default = "t3.small"
+}
+
+variable "key_name" {
+  default = "my-terraform-key"
 }
 
 variable "project" {
   default = "otms"
 }
 
-variable "region" {
-  default = "us-east-1"
-}
-
-variable "ami_id" {
-  default = "ami-033bd18826652770f"
-}
-
-variable "instance_type" {
-  default = "t3.small"
+variable "env" {
+  default = "dev"
 }
